@@ -13,10 +13,17 @@ import java.util.List;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+//    @ExceptionHandler(ResourceNotFoundException.class)
+//    public ResponseEntity<ApiError> handleResourceNotFoundException (ResourceNotFoundException e) {
+//        ApiError apiError = ApiError.builder().httpStatus(HttpStatus.BAD_REQUEST).message(e.getMessage()).build();
+//        return new ResponseEntity<>(apiError , HttpStatus.BAD_REQUEST);
+//    }
+
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiError> handleResourceNotFoundException (ResourceNotFoundException e) {
+    public ResponseEntity<ApiResponse<?>> handleResourceNotFoundException (ResourceNotFoundException e) {
         ApiError apiError = ApiError.builder().httpStatus(HttpStatus.BAD_REQUEST).message(e.getMessage()).build();
-        return new ResponseEntity<>(apiError , HttpStatus.BAD_REQUEST);
+        return handleGlobalResponse(apiError , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

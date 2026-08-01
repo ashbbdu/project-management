@@ -1,5 +1,6 @@
 package com.project_management.dto.users;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import org.hibernate.validator.constraints.Length;
 public class CreateUserDto {
     @NotNull(message = "Email is required !")
     @NotBlank(message = "Email is required !")
+    @Email(message = "Invalid Email !")
     private String email;
     @NotNull(message = "First Name is required !")
     @NotBlank(message = "First Name is required !")
