@@ -1,11 +1,11 @@
 package com.project_management.advices;
 
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
-@Data
-@Builder
+
+@Getter
+@Setter
 public class ApiResponse <T> {
     private LocalDateTime timeStamp;
     private Boolean success;
@@ -13,25 +13,25 @@ public class ApiResponse <T> {
     private ApiError error;
     private T data;
 
-    ApiResponse () {
+     ApiResponse () {
         this.timeStamp = LocalDateTime.now();
     }
 
-    ApiResponse (ApiError error) {
+     ApiResponse (ApiError error) {
         this();
         this.success = false;
         this.message = "Something went wrong";
         this.error = error;
     }
 
-    ApiResponse(T data) {
+     ApiResponse(T data) {
         this();
         this.success = true;
         this.message = "Successful Operation";
         this.data = data;
     }
 
-    public ApiResponse(LocalDateTime timeStamp,
+    private  ApiResponse(LocalDateTime timeStamp,
                        Boolean success,
                        String message,
                        ApiError error,
@@ -42,4 +42,15 @@ public class ApiResponse <T> {
         this.error = error;
         this.data = data;
     }
+
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(LocalDateTime.now() , true, message , null  , data);
+    }
+
+
+    public static <T> ApiResponse<T> error(String message, ApiError error) {
+        return new ApiResponse<>(LocalDateTime.now() , false, message , error , null);
+    }
+
+
 }
