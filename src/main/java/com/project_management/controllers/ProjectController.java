@@ -8,10 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/project")
@@ -24,5 +21,13 @@ public class ProjectController {
         ProjectResponse projectResponse = projectService.createProject(createProjectRequest);
         ApiResponse<ProjectResponse> apiResponse = ApiResponse.success("Project created successfully !" , projectResponse);
         return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
+    }
+
+    @GetMapping(path = "/{projectId}")
+    public ResponseEntity<ApiResponse<ProjectResponse>> getProjectById (@PathVariable Long projectId) {
+        ProjectResponse project = projectService.getProjectById(projectId);
+
+        ApiResponse<ProjectResponse> apiResponse = ApiResponse.success("Project fetched successfully !" , project);
+        return ResponseEntity.status(HttpStatus.OK).body(apiResponse);
     }
 }

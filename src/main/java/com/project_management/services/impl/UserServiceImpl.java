@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Slf4j // we need not to configure this because we are using lombok
 @Service
@@ -42,5 +44,26 @@ public class UserServiceImpl implements UserService {
         log.info("User saved successfully with id: {}", savedUser.getId());
         return viewUserDto;
 
+    }
+
+    @Override
+    public List<ViewUserDto> list() {
+
+        List<UserEntity> users =  userRepository.findAll();
+        return users.stream()
+                .map(user -> {
+                    ViewUserDto dto = new ViewUserDto();
+
+                    dto.setId(user.getId());
+                    dto.setEmail(user.getEmail());
+                    dto.setFirstName(user.getFirstName());
+                    dto.setLastName(user.getLastName());
+                    dto.setDesignation(user.getDesignation());
+                    dto.setCreatedAt(user.getCreatedAt());
+                    dto.setUpdatedAt(user.getUpdatedAt());
+
+                    return dto;
+                })
+                .toList();
     }
 }

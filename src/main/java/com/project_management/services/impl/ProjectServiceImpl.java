@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     @Override
-//    @Transactional
+    @Transactional
     public ProjectResponse createProject(CreateProjectRequest createProjectRequest) {
 
         System.out.println(createProjectRequest.getDescription() + " desc");
@@ -29,7 +29,7 @@ public class ProjectServiceImpl implements ProjectService {
         // Always default to TODO
         project.setProjectStatus(ProjectStatus.TODO);
 
-        projectRepository.save(project);
+//        projectRepository.save(project);
 
         Project savedProject = projectRepository.save(project);
 
@@ -44,5 +44,10 @@ public class ProjectServiceImpl implements ProjectService {
         response.setUpdatedAt(savedProject.getUpdatedAt());
 
         return response;
+    }
+
+    @Override
+    public ProjectResponse getProjectById(Long projectId) {
+        return null;
     }
 }

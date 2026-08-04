@@ -25,7 +25,9 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
 
         String path = request.getURI().getPath();
 
-        if (path.startsWith("/v3/api-docs") || path.startsWith("/swagger-ui/index.html")  || path.startsWith("swagger-ui")  || path.startsWith("/swagger-resources") ) {
+        if (path.startsWith("/v3/api-docs")
+                || path.startsWith("/swagger-ui/index.html")  || path.startsWith("swagger-ui")  || path.startsWith("/swagger-resources")
+        ) {
             return body;
         }
 

@@ -5,4 +5,6 @@ import com.project_management.dto.project.ProjectResponse;
 
 public interface ProjectService {
     public ProjectResponse createProject (CreateProjectRequest createProjectRequest);
+
+    ProjectResponse getProjectById(Long projectId);
 }

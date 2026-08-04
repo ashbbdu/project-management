@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Slf4j // we need not to configure this because we are using lombok
 @RestController
 @RequestMapping(path = "/users")
@@ -35,4 +37,11 @@ public class UserController {
 //        return ResponseEntity.ok(ApiResponse.success); // to make thi work we have to make success() a static method
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success("User Created Successfully !" , user));
     }
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<ViewUserDto>>> list () {
+        List<ViewUserDto> user = userService.list();
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("Users Fetched Successfully !" , user));
+    }
+
 }

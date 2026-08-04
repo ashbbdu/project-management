@@ -30,6 +30,9 @@ public class UserEntity {
     @Column(nullable = false)
     private String designation;
 
+    @Column(nullable = false)
+    private String password;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
