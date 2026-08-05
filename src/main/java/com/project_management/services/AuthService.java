@@ -7,12 +7,15 @@ import com.project_management.dto.auth.register.RegisterResponse;
 import com.project_management.dto.users.ViewUserDto;
 import com.project_management.entities.UserEntity;
 import com.project_management.repositories.UserRepository;
+import com.project_management.security.JwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +26,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public RegisterResponse register(@Valid RegisterRequest request) {
 
@@ -58,8 +62,8 @@ public class AuthService {
 
 
     public LoginResponse login (LoginRequest loginRequest) {
-        System.out.println("Before authenticate()");
-        System.out.println(authenticationManager.getClass());
+//        System.out.println("Before authenticate()");
+//        System.out.println(authenticationManager.getClass());
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.getEmail(),
@@ -67,9 +71,17 @@ public class AuthService {
                 )
         );
 
+//        we are setting authentication in SecurityContextHolder
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+//        principal() is current user
+        String token = jwtService.generateToken((UserDetails) authentication.getPrincipal());
+
+
+
         System.out.println("after authenticate()");
         System.out.println(authentication.isAuthenticated() + "is authenticated");
         System.out.println(authentication.getPrincipal() + "is principal");
-        return new LoginResponse("User Logged in Successfully");
+        return new LoginResponse(token);
     }
 }
