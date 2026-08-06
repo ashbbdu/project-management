@@ -1,5 +1,6 @@
 package com.project_management.config;
 
+import com.project_management.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,13 +9,15 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
-
+private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         http
@@ -32,8 +35,13 @@ public class WebSecurityConfig {
                             .authenticated()
 
 
+                ).sessionManagement(session ->
+                        session.sessionCreationPolicy(
+                                SessionCreationPolicy.STATELESS
+                        )
                 )
-                .formLogin(Customizer.withDefaults())
+                .addFilterBefore(jwtAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
+//                .formLogin(Customizer.withDefaults())
         ;
 
         return http.build();
