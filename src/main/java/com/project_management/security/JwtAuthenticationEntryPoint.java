@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-//@Component
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private final ObjectMapper objectMapper;
@@ -30,20 +30,32 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 //            }
 //            """;
 //        response.getWriter().write(body);
-//        ApiError apiError = ApiError.builder()
-//                .httpStatus(HttpStatus.UNAUTHORIZED)
+
+
+        String message = authException.getMessage();
+
+        if (message == null || message.isBlank()) {
+            message = "Token Missing";
+        }
+
+        System.out.println(message + "message");
+
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED)
 //                .message("Authentication is required to access this resource.")
-//                .build();
-//
-//        ApiResponse<?> apiResponse = ApiResponse.error("Authentication Failed" , apiError);
-//
-//        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//        response.setContentType("application/json");
-//
-//        objectMapper.writeValue(
-//                response.getOutputStream(),
-//                apiResponse
-//        );
-        return;
+                .message(message)
+                .build();
+
+        ApiResponse<?> apiResponse = ApiResponse.error("Authentication Failed" , apiError);
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json");
+
+        objectMapper.writeValue(
+                response.getOutputStream(),
+                apiResponse
+        );
+
+
     }
 }

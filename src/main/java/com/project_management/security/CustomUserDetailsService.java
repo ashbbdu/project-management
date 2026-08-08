@@ -4,6 +4,7 @@ import com.project_management.entities.UserEntity;
 import com.project_management.exceptions.ResourceNotFoundException;
 import com.project_management.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
        UserEntity user = userRepository.findByEmail(username).orElseThrow(() ->
-               new ResourceNotFoundException("User with email " + username + " does not exists !" ));
+//               new ResourceNotFoundException("User with email " + username + " does not exists !" ));
+               new BadCredentialsException("User with email " + username + " does not exists !" ));
 
        return new CustomUserDetails(user); // because Spring wants UserDetails and CustomUserDetails implements UserDetails
 //        and if we have implemented UserDetails from UserEntity then we can directly return UserEntity

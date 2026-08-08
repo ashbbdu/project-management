@@ -1,10 +1,14 @@
 package com.project_management.advices;
 
+import com.project_management.exceptions.IncorrectPasswordException;
 import com.project_management.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,5 +63,51 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<?>> handleGlobalResponse (ApiError apiError , HttpStatus status , String message) {
 //        return new ResponseEntity<>(new ApiResponse<>(apiError) , status);
         return new ResponseEntity<>(ApiResponse.error(message , apiError) , status);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<?>> handleAuthenticationException (AuthenticationException ex) {
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .message(ex.getLocalizedMessage())
+                .build();
+
+        return handleGlobalResponse(apiError, HttpStatus.UNAUTHORIZED , "UNAUTHORIZED");
+    }
+//
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponse<?>> handleJwtException (JwtException ex) {
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .message(ex.getMessage())
+                .build();
+
+        return handleGlobalResponse(apiError, HttpStatus.UNAUTHORIZED , "UNAUTHORIZED");
+    }
+//
+//    @ExceptionHandler(IncorrectPasswordException.class)
+//    public ResponseEntity<ApiResponse<?>> handleIncorrectPasswordException (IncorrectPasswordException ex) {
+//        ApiError apiError = ApiError.builder()
+//                .httpStatus(HttpStatus.UNAUTHORIZED)
+//                .message(ex.getMessage())
+//                .build();
+//
+//        return handleGlobalResponse(apiError, HttpStatus.UNAUTHORIZED , "Incorrect Password");
+//    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<?>> handleBadCredentialsException(
+            BadCredentialsException ex) {
+
+        ApiError apiError = ApiError.builder()
+                .httpStatus(HttpStatus.UNAUTHORIZED)
+                .message("Incorrect password")
+                .build();
+
+        return handleGlobalResponse(
+                apiError,
+                HttpStatus.UNAUTHORIZED,
+                "Incorrect Password"
+        );
     }
 }
