@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('PROJECT_CREATE')")
     public ResponseEntity<ApiResponse<ProjectResponse>> create (@RequestBody @Valid CreateProjectRequest createProjectRequest) {
         ProjectResponse projectResponse = projectService.createProject(createProjectRequest);
         ApiResponse<ProjectResponse> apiResponse = ApiResponse.success("Project created successfully !" , projectResponse);

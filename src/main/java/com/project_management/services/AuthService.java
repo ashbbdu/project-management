@@ -41,6 +41,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setDesignation(request.getDesignation());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setRole("USER");
 
         log.debug("Saving user with email: {}", user.getEmail());
 
@@ -54,6 +55,7 @@ public class AuthService {
         registerResponse.setDesignation(user.getDesignation());
         registerResponse.setCreatedAt(user.getCreatedAt());
         registerResponse.setUpdatedAt(user.getUpdatedAt());
+
 
 
         log.info("User saved successfully with id: {}", savedUser.getId());
@@ -82,6 +84,7 @@ public class AuthService {
         System.out.println("after authenticate()");
         System.out.println(authentication.isAuthenticated() + "is authenticated");
         System.out.println(authentication.getPrincipal() + "is principal");
+        System.out.println(authentication.getAuthorities() + " auth");
         return new LoginResponse(token);
     }
 }

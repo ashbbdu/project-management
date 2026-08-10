@@ -28,6 +28,9 @@ public class UserEntity {
     private String lastName;
 
     @Column(nullable = false)
+    private String role;
+
+    @Column(nullable = false)
     private String designation;
 
     @Column(nullable = false)

@@ -6,9 +6,11 @@ import com.project_management.security.LoggingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -18,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@EnableMethodSecurity
 public class WebSecurityConfig {
 private final JwtAuthenticationFilter jwtAuthenticationFilter;
 private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
@@ -31,8 +34,15 @@ private final LoggingFilter loggingFilter;
 
                             .requestMatchers("/hello" , "/users/**" , "/auth/**")
                             .permitAll()
-                            .requestMatchers("/brands/**")
-                            .authenticated()
+//                            .requestMatchers("/brands/**").authenticated()
+
+
+                            .requestMatchers
+                                    (HttpMethod.GET , "/project/**").hasAuthority("PROJECT_READ")
+//                            .requestMatchers
+//                                    (HttpMethod.POST , "/project/**").hasAuthority("PROJECT_CREATE")
+                            .requestMatchers("/tasks/**").hasRole("USER")
+
 ////                                .requestMatchers("/brands/**").hasAllRoles("ADMIN" , "USER")
 //
                             .anyRequest()
@@ -48,7 +58,7 @@ private final LoggingFilter loggingFilter;
                         exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
                 .addFilterBefore(jwtAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
+//                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
 
 //                .formLogin(Customizer.withDefaults())
         ;

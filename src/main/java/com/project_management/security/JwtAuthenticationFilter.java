@@ -53,6 +53,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(userName);
 
+            System.out.println("USER = " + userDetails.getUsername());
+            System.out.println("AUTHORITIES = " + userDetails.getAuthorities());
+
             System.out.println(jwtService.isTokenValid(jwt , userDetails) + " is token valid out");
             if(SecurityContextHolder.getContext().getAuthentication() == null) {
                 System.out.println(jwtService.isTokenValid(jwt , userDetails) + " is token valid in");
@@ -66,9 +69,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     userDetails.getAuthorities()
                             );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    System.out.println(
+                            "Context Authentication = " +
+                                    SecurityContextHolder.getContext().getAuthentication()
+                    );
                 }
             }
-            filterChain.doFilter(request, response);
+//            filterChain.doFilter(request, response); // should be outside try catch
 
         }
 //        catch (Exception ex) {
@@ -84,7 +91,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new BadCredentialsException("Token Expired")
             );
 
-        } catch (JwtException ex) {
+        } catch (Exception ex) {
 
             jwtAuthenticationEntryPoint.commence(
                     request,
@@ -92,6 +99,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new BadCredentialsException("Invalid Token")
             );
         }
-
+        filterChain.doFilter(request, response);
     }
+
 }
