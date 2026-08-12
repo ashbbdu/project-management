@@ -41,7 +41,7 @@ public class AuthService {
         user.setEmail(request.getEmail());
         user.setDesignation(request.getDesignation());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("USER");
+//        user.setRole("USER");
 
         log.debug("Saving user with email: {}", user.getEmail());
 

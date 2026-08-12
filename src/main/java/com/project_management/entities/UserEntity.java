@@ -27,8 +27,9 @@ public class UserEntity {
     @Column(nullable = true)
     private String lastName;
 
-    @Column(nullable = false)
-    private String role;
+    @ManyToOne()
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
 
     @Column(nullable = false)
     private String designation;

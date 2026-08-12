@@ -15,9 +15,17 @@ public class CustomUserDetails implements UserDetails {
     private final UserEntity user;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
 //        return List.of(
 //                new SimpleGrantedAuthority("ROLE_" + user.getRole())
 //        );
+//        System.out.println(user.getRole());
+//        System.out.println("Permsssion : " +
+//                user.getRole().getPermissions().stream()
+//                        .map(res -> res.getPermission()).toList());
+
+        System.out.println("USER = " + user.getEmail());
+        System.out.println("ROLE = " + user.getRole().getRole());
         return List.of(
                 new SimpleGrantedAuthority("ROLE_USER")
                 ,
@@ -25,6 +33,7 @@ public class CustomUserDetails implements UserDetails {
                 ,
                 new SimpleGrantedAuthority("PROJECT_CREATE")
         );
+
     }
 
     @Override
@@ -57,4 +66,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

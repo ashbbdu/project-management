@@ -18,7 +18,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @PostMapping
-    @PreAuthorize("hasAuthority('PROJECT_CREATE')")
+
     public ResponseEntity<ApiResponse<ProjectResponse>> create (@RequestBody @Valid CreateProjectRequest createProjectRequest) {
         ProjectResponse projectResponse = projectService.createProject(createProjectRequest);
         ApiResponse<ProjectResponse> apiResponse = ApiResponse.success("Project created successfully !" , projectResponse);

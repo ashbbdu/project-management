@@ -7,6 +7,7 @@ import com.project_management.entities.Project;
 import com.project_management.repositories.ProjectRepository;
 import com.project_management.services.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
+
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('PROJECT_CREATE')")
     public ProjectResponse createProject(CreateProjectRequest createProjectRequest) {
 
         System.out.println(createProjectRequest.getDescription() + " desc");
