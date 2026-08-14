@@ -1,5 +1,6 @@
 package com.project_management.security;
 
+import com.project_management.entities.PermissionsEntity;
 import com.project_management.entities.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
@@ -7,8 +8,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @RequiredArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -16,23 +19,39 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-//        return List.of(
-//                new SimpleGrantedAuthority("ROLE_" + user.getRole())
-//        );
-//        System.out.println(user.getRole());
 //        System.out.println("Permsssion : " +
 //                user.getRole().getPermissions().stream()
 //                        .map(res -> res.getPermission()).toList());
+//
+//        System.out.println("USER = " + user.getEmail());
+//        System.out.println("ROLE = " + user.getRole().getRole());
 
-        System.out.println("USER = " + user.getEmail());
-        System.out.println("ROLE = " + user.getRole().getRole());
-        return List.of(
-                new SimpleGrantedAuthority("ROLE_USER")
-                ,
-                new SimpleGrantedAuthority("PROJECT_READ")
-                ,
-                new SimpleGrantedAuthority("PROJECT_CREATE")
-        );
+
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole().getRole()));
+//        user.getRole().getPermissions().stream()
+//                .map(res -> authorities.add(new SimpleGrantedAuthority(res.getPermission()))).toList();
+
+        user.getRole()
+                .getPermissions()
+                .forEach(permission ->
+                        authorities.add(
+                                new SimpleGrantedAuthority(
+                                        permission.getPermission()
+                                )
+                        )
+                );
+
+
+//        return List.of(
+//                new SimpleGrantedAuthority("ROLE_USER")
+//                ,
+//                new SimpleGrantedAuthority("PROJECT_READ")
+//                ,
+//                new SimpleGrantedAuthority("PROJECT_CREATE")
+//        );
+        return authorities;
 
     }
 

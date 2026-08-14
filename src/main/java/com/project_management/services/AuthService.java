@@ -73,6 +73,7 @@ public class AuthService {
                 )
         );
 
+        System.out.println(authentication.getAuthorities() + " user Authorities");
 //        we are setting authentication in SecurityContextHolder
         SecurityContextHolder.getContext().setAuthentication(authentication);
 

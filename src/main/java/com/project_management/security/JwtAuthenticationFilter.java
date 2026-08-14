@@ -91,13 +91,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new BadCredentialsException("Token Expired")
             );
 
-        } catch (Exception ex) {
+        }
+//        catch (Exception ex) {
+//
+//            jwtAuthenticationEntryPoint.commence(
+//                    request,
+//                    response,
+//                    new BadCredentialsException("Invalid Token")
+//            );
+//        }
+        catch (Exception ex) {
 
-            jwtAuthenticationEntryPoint.commence(
-                    request,
-                    response,
-                    new BadCredentialsException("Invalid Token")
-            );
+            ex.printStackTrace();
+
+            throw ex;
         }
         filterChain.doFilter(request, response);
     }

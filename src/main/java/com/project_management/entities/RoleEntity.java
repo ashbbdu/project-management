@@ -3,6 +3,7 @@ package com.project_management.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.repository.cdi.Eager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +25,8 @@ public class RoleEntity {
     @OneToMany(mappedBy = "role")
     private List<UserEntity> users;
 
-    @ManyToMany
+//    @ManyToMany(fetch = FetchType.EAGER) //why this was causing jwt invalid token issue
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "role_permissions",
             joinColumns = @JoinColumn(name = "role_id"),
