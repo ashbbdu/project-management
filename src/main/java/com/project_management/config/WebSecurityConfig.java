@@ -1,5 +1,6 @@
 package com.project_management.config;
 
+import com.project_management.security.JwtAccessDeniedHandler;
 import com.project_management.security.JwtAuthenticationEntryPoint;
 import com.project_management.security.JwtAuthenticationFilter;
 import com.project_management.security.LoggingFilter;
@@ -24,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 private final JwtAuthenticationFilter jwtAuthenticationFilter;
 private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 private final LoggingFilter loggingFilter;
     @Bean
     SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
@@ -37,11 +39,11 @@ private final LoggingFilter loggingFilter;
 //                            .requestMatchers("/brands/**").authenticated()
 
 
-                            .requestMatchers
-                                    (HttpMethod.GET , "/project/**").hasAuthority("PROJECT_READ")
+//                            .requestMatchers
+//                                    (HttpMethod.GET , "/project/**").hasAuthority("PROJECT_READ")
 //                            .requestMatchers
 //                                    (HttpMethod.POST , "/project/**").hasAuthority("PROJECT_CREATE")
-                            .requestMatchers("/tasks/**").hasRole("USER")
+//                            .requestMatchers("/tasks/**").hasRole("USER")
 
 ////                                .requestMatchers("/brands/**").hasAllRoles("ADMIN" , "USER")
 //
@@ -56,6 +58,7 @@ private final LoggingFilter loggingFilter;
                 )
                 .exceptionHandling(exception ->
                         exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                                .accessDeniedHandler(jwtAccessDeniedHandler)
                 )
                 .addFilterBefore(jwtAuthenticationFilter , UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)

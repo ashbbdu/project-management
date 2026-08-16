@@ -50,6 +50,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('PROJECT_UPDATE')")
     public ProjectResponse getProjectById(Long projectId) {
         return null;
     }
