@@ -1,6 +1,8 @@
 package com.project_management.repositories;
 
 import com.project_management.entities.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +17,13 @@ public interface ProjectRepository extends JpaRepository<Project , Long> {
 //    @EntityGraph(attributePaths = {"tasks"})
     List<Project> findAllWithTasks();
 
+//    @EntityGraph(attributePaths = {"tasks"})
+//    @Override
+//    List<Project> findAll();
+
+//    Pagination
+
     @EntityGraph(attributePaths = {"tasks"})
     @Override
-    List<Project> findAll();
+    Page <Project> findAll(Pageable pageable);
 }

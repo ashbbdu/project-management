@@ -10,6 +10,9 @@ import com.project_management.entities.Project;
 import com.project_management.repositories.ProjectRepository;
 import com.project_management.services.ProjectService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.config.Task;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -74,7 +77,9 @@ public class ProjectServiceImpl implements ProjectService {
 //        }
 
 //        List<Project> projects = projectRepository.findAllWithTasks();
-        List<Project> projects = projectRepository.findAll();
+        Pageable pageable = PageRequest.of(0 , 10);
+//        List<Project> projects = projectRepository.findAll();
+        Page<Project> projects = projectRepository.findAll(pageable);
 
         List<ProjectTaskDto> response = projects.stream().map(project -> {
             ProjectTaskDto projectTaskDto = new ProjectTaskDto();
